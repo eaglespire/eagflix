@@ -1,15 +1,17 @@
 import 'package:eagleflix/models/actor.dart';
 import 'package:eagleflix/models/movie.dart';
+import 'package:eagleflix/models/tv.dart';
 import 'package:eagleflix/services/actors_service.dart';
 import 'package:eagleflix/services/movie_service.dart';
+import 'package:eagleflix/services/tv_services.dart';
 import 'package:eagleflix/widgets/movie_info.dart';
 import 'package:eagleflix/widgets/movie_overview.dart';
 import 'package:eagleflix/widgets/movie_thumbnail.dart';
 import 'package:eagleflix/widgets/spinner.dart';
 import 'package:flutter/material.dart';
 
-class DetailPage extends StatefulWidget {
-  const DetailPage(
+class TvDetail extends StatefulWidget {
+  const TvDetail(
       {Key? key,
       required this.id,
       required this.backdropPath,
@@ -26,14 +28,14 @@ class DetailPage extends StatefulWidget {
   final num? vote;
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  State<TvDetail> createState() => _TvDetailState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _TvDetailState extends State<TvDetail> {
   List<Actor> actors = [];
-  List<Movie> movies = [];
+  List<Tv> movies = [];
   bool isLoading = true;
-  final MovieService _movieService = MovieService();
+  final TvServices _tvServices = TvServices();
 
   void getData() async {
     /*
@@ -47,8 +49,8 @@ class _DetailPageState extends State<DetailPage> {
       Fetch similar movies
      */
 
-    await _movieService.fetchSimilarMoviesData(id: widget.id);
-    movies = _movieService.fetchSimilarMovies();
+    await _tvServices.fetchSimilarTVShowsData(id: widget.id);
+    movies = _tvServices.getSimilarTVShows();
 
     setState(() {
       isLoading = false;
@@ -153,7 +155,7 @@ class _DetailPageState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      'Similar movies',
+                      'Similar Tv Shows',
                       style: _style1,
                     ),
                   ),
@@ -175,13 +177,13 @@ class _DetailPageState extends State<DetailPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return DetailPage(
+                                  return TvDetail(
                                     id: movies[index].id,
                                     backdropPath: movies[index].backdropPath,
                                     overview: movies[index].overview,
-                                    year: _movieService.getYear(
-                                        date: movies[index].releaseDate),
-                                    title: movies[index].originalTitle,
+                                    year: _tvServices.getYear(
+                                        date: movies[index].firstAirDate),
+                                    title: movies[index].originalName,
                                     vote: movies[index].voteAverage,
                                   );
                                 },
@@ -190,9 +192,9 @@ class _DetailPageState extends State<DetailPage> {
                           },
                           child: MovieThumbnail(
                             image: movies[index].posterPath,
-                            title: movies[index].originalTitle,
-                            year: _movieService.getYear(
-                                date: movies[index].releaseDate),
+                            title: movies[index].originalName,
+                            year: _tvServices.getYear(
+                                date: movies[index].firstAirDate),
                           ),
                         );
                       },

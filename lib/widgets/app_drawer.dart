@@ -1,3 +1,4 @@
+import 'package:eagleflix/screens/tv_shows.dart';
 import 'package:eagleflix/screens/upcoming.dart';
 import 'package:flutter/material.dart';
 
@@ -43,8 +44,18 @@ class AppDrawer extends StatelessWidget {
           ),
         ),
       ),
-      const Expanded(
+      Expanded(
         child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const TVShows(title: 'eagleflix');
+                },
+              ),
+            );
+          },
           leading: Icon(Icons.tv_off),
           title: Text(
             'TV Shows',
