@@ -1,8 +1,10 @@
 import 'package:eagleflix/models/actor.dart';
 import 'package:eagleflix/models/movie.dart';
+import 'package:eagleflix/models/trailer.dart';
 import 'package:eagleflix/models/tv.dart';
 import 'package:eagleflix/services/actors_service.dart';
 import 'package:eagleflix/services/movie_service.dart';
+import 'package:eagleflix/services/trailer_service.dart';
 import 'package:eagleflix/services/tv_services.dart';
 import 'package:eagleflix/widgets/movie_info.dart';
 import 'package:eagleflix/widgets/movie_overview.dart';
@@ -15,6 +17,7 @@ class TvDetail extends StatefulWidget {
       {Key? key,
       required this.id,
       required this.backdropPath,
+      required this.posterPath,
       required this.overview,
       required this.title,
       required this.vote,
@@ -22,6 +25,7 @@ class TvDetail extends StatefulWidget {
       : super(key: key);
   final int id;
   final String? backdropPath;
+  final String? posterPath;
   final String? overview;
   final String? title;
   final String? year;
@@ -34,6 +38,7 @@ class TvDetail extends StatefulWidget {
 class _TvDetailState extends State<TvDetail> {
   List<Actor> actors = [];
   List<Tv> movies = [];
+  List<Trailer> trailers = [];
   bool isLoading = true;
   final TvServices _tvServices = TvServices();
 
@@ -81,6 +86,12 @@ class _TvDetailState extends State<TvDetail> {
     getData();
   }
 
+  void getTrailers() async {
+    TrailerService trailerService = TrailerService();
+    await trailerService.searchForTrailers(movieId: widget.id);
+    trailers = trailerService.fetchTrailers();
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.title);
@@ -104,6 +115,8 @@ class _TvDetailState extends State<TvDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MovieInfo(
+                      posterPath: widget.posterPath ?? '',
+                      id: widget.id,
                       vote: widget.vote ?? 0.0,
                       year: widget.year ?? '1900',
                       title: widget.title ?? 'Not Available',
@@ -185,6 +198,7 @@ class _TvDetailState extends State<TvDetail> {
                                         date: movies[index].firstAirDate),
                                     title: movies[index].originalName,
                                     vote: movies[index].voteAverage,
+                                    posterPath: movies[index].posterPath,
                                   );
                                 },
                               ),

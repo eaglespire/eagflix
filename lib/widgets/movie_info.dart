@@ -1,14 +1,20 @@
+import 'package:eagleflix/models/trailer.dart';
+import 'package:eagleflix/screens/view_trailers.dart';
 import 'package:flutter/material.dart';
 
 class MovieInfo extends StatelessWidget {
   MovieInfo(
       {Key? key,
+      required this.posterPath,
+      required this.id,
       required this.vote,
       required this.year,
       required this.backdrop,
       required this.title,
       required this.overview})
       : super(key: key);
+  final int id;
+  final String posterPath;
   final String year;
   final num vote;
   final String? backdrop;
@@ -99,7 +105,19 @@ class MovieInfo extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Colors.grey.shade300),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ViewTrailers(
+                                id: id,
+                                posterPath: posterPath,
+                              );
+                            },
+                          ),
+                        );
+                      },
                       child: Row(
                         children: [
                           Icon(

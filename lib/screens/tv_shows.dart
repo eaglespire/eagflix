@@ -91,6 +91,7 @@ class _TVShowsState extends State<TVShows> {
                                       date: movies[index].firstAirDate),
                                   title: movies[index].originalName,
                                   vote: movies[index].voteAverage,
+                                  posterPath: movies[index].posterPath,
                                 );
                               },
                             ),
@@ -107,6 +108,10 @@ class _TVShowsState extends State<TVShows> {
                   ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey.shade800,
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                  ),
                   onPressed: () {
                     setState(() {
                       pageNumber++;

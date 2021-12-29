@@ -101,6 +101,7 @@ class _HomeState extends State<Home> {
                                       date: movies[index].releaseDate),
                                   title: movies[index].originalTitle,
                                   vote: movies[index].voteAverage,
+                                  posterPath: movies[index].posterPath,
                                 );
                               },
                             ),
@@ -117,6 +118,10 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.grey.shade800,
+                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                  ),
                   onPressed: () {
                     setState(() {
                       pageNumber++;

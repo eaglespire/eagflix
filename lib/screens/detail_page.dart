@@ -1,7 +1,9 @@
 import 'package:eagleflix/models/actor.dart';
 import 'package:eagleflix/models/movie.dart';
+import 'package:eagleflix/models/trailer.dart';
 import 'package:eagleflix/services/actors_service.dart';
 import 'package:eagleflix/services/movie_service.dart';
+import 'package:eagleflix/services/trailer_service.dart';
 import 'package:eagleflix/widgets/movie_info.dart';
 import 'package:eagleflix/widgets/movie_overview.dart';
 import 'package:eagleflix/widgets/movie_thumbnail.dart';
@@ -13,6 +15,7 @@ class DetailPage extends StatefulWidget {
       {Key? key,
       required this.id,
       required this.backdropPath,
+      required this.posterPath,
       required this.overview,
       required this.title,
       required this.vote,
@@ -20,6 +23,7 @@ class DetailPage extends StatefulWidget {
       : super(key: key);
   final int id;
   final String? backdropPath;
+  final String? posterPath;
   final String? overview;
   final String? title;
   final String? year;
@@ -32,8 +36,15 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   List<Actor> actors = [];
   List<Movie> movies = [];
+  List<Trailer> trailers = [];
   bool isLoading = true;
   final MovieService _movieService = MovieService();
+
+  void getTrailers() async {
+    TrailerService trailerService = TrailerService();
+    await trailerService.searchForTrailers(movieId: widget.id);
+    trailers = trailerService.fetchTrailers();
+  }
 
   void getData() async {
     /*
@@ -76,6 +87,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
+    getTrailers();
     getData();
   }
 
@@ -102,6 +114,8 @@ class _DetailPageState extends State<DetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MovieInfo(
+                      posterPath: widget.posterPath ?? '',
+                      id: widget.id,
                       vote: widget.vote ?? 0.0,
                       year: widget.year ?? '1900',
                       title: widget.title ?? 'Not Available',
@@ -183,6 +197,7 @@ class _DetailPageState extends State<DetailPage> {
                                         date: movies[index].releaseDate),
                                     title: movies[index].originalTitle,
                                     vote: movies[index].voteAverage,
+                                    posterPath: movies[index].posterPath,
                                   );
                                 },
                               ),

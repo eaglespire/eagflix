@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Home(title: appBarTitle),
         '/search': (context) => SearchScreen(title: appBarTitle),
-        '/movies/detail': (context) => DetailScreen(title: appBarTitle),
       },
       theme: ThemeData.dark(),
     );

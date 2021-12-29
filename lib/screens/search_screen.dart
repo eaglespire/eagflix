@@ -89,6 +89,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 date: results[index].releaseDate),
                             title: results[index].originalTitle,
                             vote: results[index].voteAverage,
+                            posterPath: results[index].posterPath,
                           );
                         },
                       ),
